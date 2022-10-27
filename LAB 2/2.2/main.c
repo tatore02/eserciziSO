@@ -15,11 +15,19 @@ int main(){
   lseek(fd,0,SEEK_SET);
   lseek(fd2,0,SEEK_SET);
 
+  //leggo carattere per carattere da tastiera
+  /*
   while((n = read(0,buffer,20)) > 0){
     if(n > 2)
       break;
     write(fd,buffer,1);
   }
+  */
+
+  //leggo stringa intera
+  printf("Inserire stringa:\n");
+  n = read(STDIN_FILENO,buffer,20);
+  write(fd,buffer,n);
 
   int i = -1;
   m = lseek(fd,i,SEEK_END);
@@ -31,9 +39,12 @@ int main(){
     m = lseek(fd,i,SEEK_CUR);
   }
 
-  /*
-  while((n = read(fd,buffer,1) > 0)){
-    write(fd2,buffer,n);
-  }
-  */
+  //lettura file incollato al contrario
+  lseek(fd2,0,SEEK_SET);
+
+  char c;
+  while(read(fd2,&c,1) > 0)
+    write(STDOUT_FILENO,&c,1);
+
+  printf("\n");
 }

@@ -6,14 +6,14 @@
 
 int main(){
   int fd1,fd2,rd,i;
-  char buf[7]="ciao";
-  char buf1[9]="ciao2";
+  char buf[]="ciao";
+  char buf1[]="ciao2";
 
   char ch;
 
   fd1=open("FILE1.txt",O_RDWR|O_CREAT|O_TRUNC,0644);
 
-  write(fd1,buf,sizeof(buf));
+  write(fd1,buf,sizeof(buf)-1);
 
   int j=0;
   while(write(fd1,&buf1[j],sizeof(char)) > 0){

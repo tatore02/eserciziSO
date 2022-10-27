@@ -5,11 +5,11 @@
 int main(int argc,char *argv[]){
 
   struct stat buf;
-  stat("ciao.txt",&buf);
+  lstat("ciao.txt",&buf);
 
-  // if(S_ISUID(buf.st_mode) & S_ISGID(buf.st_mode))
-  // puts("flag settato");
-  // else puts("flag NON settato");
+  if(S_ISUID(buf.st_uid) & S_ISGID(buf.st_gid))
+  puts("flag settato");
+  else puts("flag NON settato");
 
-  printf("%d",S_ISUID(buf.st_mode));
+
 }

@@ -1,1 +1,3 @@
-ciao
+ciaoProva sa sa, prova
+
+Prova con la scanf: ciao
