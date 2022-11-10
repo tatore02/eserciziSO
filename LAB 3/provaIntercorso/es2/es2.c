@@ -23,7 +23,9 @@ int main(int argc,char* argv[]){
 
   struct dirent *dir;
   DIR *d;
-  struct stat *buf;
+  struct stat buf;
+
+  char *fullPath;
 
   int flag = 0;
 
@@ -40,15 +42,21 @@ int main(int argc,char* argv[]){
 
 
   if(flag == 1){
-    lstat(strcat(cwd,"/text"),buf);
+    fullPath = strcat(cwd,"/");
+    fullPath = strcat(fullPath,argv[1]);
 
-    if(S_ISREG(buf->st_mode))
+    if(lstat(fullPath,&buf) != 0)
+      if(stat(fullPath,&buf) != 0)
+        printf("ERROR stat\n");
+
+
+    if(S_ISREG(buf.st_mode))
       printf("%s è un file regolare\n",argv[1]);
-    else if(S_ISDIR(buf->st_mode)){
+    else if(S_ISDIR(buf.st_mode)){
       printf("%s è una directory\n",argv[1]);
       flag = 0;
     }
-    else if(S_ISLNK(buf->st_mode)){
+    else if(S_ISLNK(buf.st_mode)){
       printf("%s è un link\n",argv[1]);
       flag = 0;
     }
@@ -60,11 +68,33 @@ int main(int argc,char* argv[]){
       printf("ERROR open\n");
 
     int count = 0;
-    char *c;
-    while(read(fd,c,1) > 0)
-      if(*c == 'a' || *c == 'e' || *c == 'i' || *c == 'o' || *c == 'u')
+    char c;
+    while(read(fd,&c,1) > 0)
+      if(c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u')
         count++;
 
     printf("Numero di vocali: %d\n",count);
+
+    //permessi
+    if(buf.st_mode & S_IRUSR)
+      printf("L'utente può leggere il file\n");
+    if(buf.st_mode & S_IWUSR)
+      printf("L'utente può scrivere il file\n");
+    if(buf.st_mode & S_IXUSR)
+      printf("L'utente può eseguire il file\n");
+
+    if(buf.st_mode & S_IRGRP)
+      printf("Il gruppo può leggere il file\n");
+    if(buf.st_mode & S_IWGRP)
+      printf("Il gruppo può scrivere il file\n");
+    if(buf.st_mode & S_IXGRP)
+      printf("Il gruppo può eseguire il file\n");
+
+    if(buf.st_mode & S_IROTH)
+      printf("Gli altri possono leggere il file\n");
+    if(buf.st_mode & S_IWOTH)
+      printf("Gli altri possono scrivere il file\n");
+    if(buf.st_mode & S_IXOTH)
+      printf("Gli altri possono eseguire il file\n");
   }
 }
