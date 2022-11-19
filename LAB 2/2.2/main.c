@@ -31,7 +31,7 @@ int main(){
 
   int i = -1;
   m = lseek(fd,i,SEEK_END);
-  i--;
+  i = -2;
 
   while(m >= 0){
     if((n = read(fd,buffer,1)) > 0)

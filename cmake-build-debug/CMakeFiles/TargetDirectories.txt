@@ -1,0 +1,3 @@
+/Users/emanueleruocco/Desktop/SO/esercizi/cmake-build-debug/CMakeFiles/esercizi.dir
+/Users/emanueleruocco/Desktop/SO/esercizi/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/emanueleruocco/Desktop/SO/esercizi/cmake-build-debug/CMakeFiles/rebuild_cache.dir
