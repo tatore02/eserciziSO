@@ -1,5 +1,5 @@
-SALVATORE   RUOCCO
-EMANUELE    RUOCCO
-AGOSTINO    ZARRELLA
-EMANUELE    RUOCCO
-LUCA    VICIDOMINI
+Salvatore   Ruocco
+Emanuele    Ruocco
+Agostino    Zarrella
+Emanuele    Ruocco
+Luca    Vicidomini
