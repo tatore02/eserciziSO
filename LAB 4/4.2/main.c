@@ -11,10 +11,6 @@ implementata utilizzando la funzione setvbuf().
 modeOfBuf == 0: use buf of lenght BUFSIZ
 modeOfBuf == 1: steam unbeffered
 */
-void my_setbuf(FILE *fp){
+void my_setbuf(FILE *fp,char *buf){
   setvbuf(fp,NULL,_IONBF,0);
-}
-
-int main(){
-
 }
