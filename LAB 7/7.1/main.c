@@ -15,10 +15,14 @@ int main(){
     pid = fork();
     if(pid == 0){
         printf("Sono il processo figlio %d del genitore: %d\n",getpid(),getppid());
-        //exit(1);
+        exit(0);
     }
-    else if(pid > 0){
-        execl("/usr/bin","ps",NULL);
+
+    //usa il comando ps da shell
+    sleep(3);
+
+    if(pid > 0){
         printf("Sono il genitore %d\n",getpid());
+        //execl("/usr/bin","ps",NULL);
     }
 }
