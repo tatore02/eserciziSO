@@ -17,8 +17,7 @@ int main(){
 
   char *lista[20];
   char buffer[50];
-  char *str1;
-  char *str2;
+
   int i=0;
 
   while(!feof(fp1)){
