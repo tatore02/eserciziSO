@@ -9,6 +9,7 @@ Scrivere un codice C che:
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <sys/wait.h>
 
 int main(){
     printf("Ordina..\n");
@@ -20,6 +21,7 @@ int main(){
         exit(1);
     }
     else if(pid > 0){
+        wait(NULL);
         printf("fine\n");
         exit(1);
     }

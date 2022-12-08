@@ -37,7 +37,6 @@ int main(){
   //tot processi: 3
 
   if(t1 == 0 || t2 == 0){
-    
-    puts("Hello world");
+      printf("Sono il processo %d figlio di %d\n",getpid(),getppid());
   }
 }

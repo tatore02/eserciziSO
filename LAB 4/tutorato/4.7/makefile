@@ -5,4 +5,4 @@ main.o:
 	gcc -c main.c
 
 clean:
-	rm -f main.o a.out
+	rm -f main.o RISULTATO.txt a.out
