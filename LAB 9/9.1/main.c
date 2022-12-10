@@ -26,8 +26,8 @@ int main(int argc,char *argv[]){
     pid1 = fork();
     if(pid1 == 0) {
         close(fd[0]);
-        dup2(fd[1],0);
-        execl("bin/cat", "cat",argv[1],NULL);
+        dup2(fd[1],1);
+        execl("/bin/cat", "cat",argv[1],NULL);
         exit(1);
     }
     else if(pid1 > 0){
@@ -37,15 +37,13 @@ int main(int argc,char *argv[]){
     pid2 = fork();
     if(pid2 == 0) {
         close(fd[1]);
-        dup2(fd[0],1);
-        execl("bin/more","more",argv[1],NULL);
+        dup2(fd[0],0);
+        execl("/bin/more","more",NULL);
         exit(1);
     }
     else if(pid2 > 0){
         wait(NULL);
     }
-
-
 
     exit(0);
 }
