@@ -15,15 +15,19 @@ Alla fine dell'esecuzione il processo figlio comunicherà al padre
 
 
 int main(int argc,char *argv[]){
+
     if(argc != 2){
         perror("Inserire 2 parametri\n");
         exit(1);
     }
 
+
     pid_t pid = fork();
     if(pid == 0){
-        execl("/bin/ls","ls","-l",argv[1],NULL);
-        
+        execl("/usr/bin/find","find",argv[1],NULL);
+        exit(1);
 
     }
+    wait(NULL);
+    exit(1);
 }
