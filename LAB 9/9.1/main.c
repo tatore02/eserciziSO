@@ -30,20 +30,20 @@ int main(int argc,char *argv[]){
         execl("/bin/cat", "cat",argv[1],NULL);
         exit(1);
     }
-    else if(pid1 > 0){
-        wait(NULL);
+
+    if(pid1 > 0) {
+        pid2 = fork();
+        if (pid2 == 0) {
+            close(fd[1]);
+            dup2(fd[0], 0);
+            execl("/usr/bin/more", "more", NULL);
+            exit(1);
+        }
     }
 
-    pid2 = fork();
-    if(pid2 == 0) {
-        close(fd[1]);
-        dup2(fd[0],0);
-        execl("/bin/more","more",NULL);
-        exit(1);
-    }
-    else if(pid2 > 0){
-        wait(NULL);
-    }
+    if(pid)
+    wait(NULL);
+    wait(NULL);
 
     exit(0);
 }

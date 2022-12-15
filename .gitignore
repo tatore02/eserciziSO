@@ -1,5 +1,5 @@
 .DS_STORE
-a.out
+*.out
 .xml
 .iml
 .idea

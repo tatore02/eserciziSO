@@ -40,7 +40,7 @@ int main(){
         char curDir[255];
         getcwd(curDir,255);
         strcat(curDir,"/CONTA_VOCALI.out");
-        execl(curDir,"CONTA_VOCALI.out",risposta,NULL); //FAI VEDERE AD ANTONIO
+        execl(curDir,"CONTA_VOCALI.out",risposta,NULL);
         exit(1);
     }
 
