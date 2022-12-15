@@ -64,7 +64,7 @@ int main(){
                     }
                 }
                 else
-                    write(sonToDad[1],"NO",3);
+                    write(sonToDad[1],"No",3);
             }
         }
         exit(1);
@@ -88,7 +88,7 @@ int main(){
         read(sonToDad[0],&count,sizeof(int));
         printf("Il figlio ha contato ben %d file\n",count);
     }
-    else if(strcmp(risposta,"NO") == 0){
+    else if(strcmp(risposta,"No") == 0){
         printf("La directory %s non esiste\n",nome);
     }
 

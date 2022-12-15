@@ -40,10 +40,11 @@ int main(int argc,char *argv[]){
             exit(1);
         }
     }
-
-    if(pid)
+    close(fd[0]);
+    close(fd[1]);
     wait(NULL);
     wait(NULL);
-
     exit(0);
 }
+
+
