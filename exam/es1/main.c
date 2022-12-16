@@ -1,97 +1,89 @@
 /*
-Scrivere un programma in linguaggio C che in sequenza:
 a) crei 2 pipe e un figlio (le 2 pipe saranno utilizzate per una comunicazione
-    bidirezionale tra padre e figlio);
+bidirezionale tra padre e figlio);
 b) dopo la creazione del figlio, il padre prenda in input dall’utente una stringa e la
-    invii al figlio utilizzando la prima pipe; dopo aver ricevuto le risposte del figlio, le
-    stampi e completi la sua esecuzione;
+invii al figlio utilizzando la prima pipe; dopo aver ricevuto le risposte del figlio, le
+stampi e completi la sua esecuzione;
 c) faccia controllare al figlio se esista una directory nella current working directory
-    con lo stesso nome (si utilizzino le system call che permettono di leggere il contenuto
-    di una directory) ed invii al padre tale informazione.
+con lo stesso nome (si utilizzino le system call che permettono di leggere il
+contenuto di una directory) ed invii al padre tale informazione.
+d) Nel caso la directory esista, faccia contare al figlio il numero di file standard
+contenuti ed invii al padre la risposta;
  */
 
-
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <stdlib.h>
+#include <fcntl.h>
 #include <dirent.h>
 #include <sys/stat.h>
-#include <fcntl.h>
+#include <stdbool.h>
 
 int main(){
 
-    int dadToSon[2];
     int sonToDad[2];
+    int dadToSon[2];
 
-    pipe(dadToSon);
     pipe(sonToDad);
+    pipe(dadToSon);
 
-    char nome[20];
-    char risposta[6];
-
-    struct stat buf;
-    struct dirent *d_struct;
+    struct dirent *dir;
     DIR *d;
+    struct stat buf;
 
-    pid_t pid = fork();
-    if(pid == 0){
+    pid_t pid1,pid2;
+    pid1 = fork();
+    if(pid1 == 0){
         close(sonToDad[0]);
         close(dadToSon[1]);
 
-        read(dadToSon[0],nome,sizeof(nome));
+        char buffer[20];
+        read(dadToSon[0],buffer,sizeof buffer);
+        printf("Messagio ricevuto dal padre: %s\n",buffer);
 
         d = opendir(".");
-        while((d_struct = readdir(d)) != NULL){
-            if(strcmp(d_struct->d_name,nome) == 0){
-                lstat(d_struct->d_name,&buf);
-
-                if(S_ISDIR(buf.st_mode)){
-                    printf("Directory %s trovata\n",d_struct->d_name);
-                    write(sonToDad[1],"Si",3);
-
-                    read(dadToSon[0],risposta,sizeof(risposta));
-                    if(strcmp(risposta,"Conta") == 0){
-                        int count = 0;
-                        d = opendir(nome);
-                        chdir(nome);
-                        while((d_struct = readdir(d)) != NULL){
-                            lstat(d_struct->d_name,&buf);
-                            if(S_ISREG(buf.st_mode))
-                                count++;
-                        }
-                        write(sonToDad[1],&count,sizeof(int));
-                    }
-                }
-                else
-                    write(sonToDad[1],"No",3);
-            }
+        while((dir = readdir(d)) != NULL){
+            if(strcmp(dir->d_name,buffer) == 0)
+                lstat(buffer,&buf);
         }
+        bool flag = false;
+        if(S_ISDIR(buf.st_mode))
+            flag = true;
+
+        write(sonToDad[1],&flag,sizeof flag);
+
+        exit(1);
+    }
+    else if(pid1 > 0){
+        close(sonToDad[1]);
+        close(dadToSon[0]);
+
+        char buffer[20];
+        printf("Inserire cartella da cercare: ");
+        scanf("%s",buffer);
+        write(dadToSon[1],buffer,sizeof buffer);
+
+        bool flag = false;
+        read(sonToDad[0],&flag,sizeof flag);
+        if(flag == true) {
+            char fullPath[255];
+            getcwd(fullPath,sizeof fullPath);
+            strcat(fullPath,"/");
+            strcat(fullPath,buffer);
+            chdir(fullPath);
+            d = opendir(".");
+
+            int count = 0;
+            while((dir = readdir(d)) != NULL)
+                if(lstat(dir->d_name,&buf) != -1)
+                    if(S_ISREG(buf.st_mode))
+                        count++;
+
+            printf("Numero di file regolari %d\n",count);
+        }
+        wait(NULL);
         exit(1);
     }
 
-    close(dadToSon[0]);
-    close(sonToDad[1]);
-
-    printf("Inserire una stringa: ");
-    scanf("%s",nome);
-
-    write(dadToSon[1],nome,sizeof(nome));
-    printf("Faccio cercare una directory %s a mio figlio\n",nome);
-    read(sonToDad[0],risposta,3);
-
-    printf("La risposta del figlio è stata %s\n",risposta);
-
-    if(strcmp(risposta,"Si") == 0){
-        write(dadToSon[1],"Conta",6);
-        int count;
-        read(sonToDad[0],&count,sizeof(int));
-        printf("Il figlio ha contato ben %d file\n",count);
-    }
-    else if(strcmp(risposta,"No") == 0){
-        printf("La directory %s non esiste\n",nome);
-    }
-
-    wait(NULL);
-    exit(1);
 }
